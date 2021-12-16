@@ -10,6 +10,12 @@ class Treatment {
         image: newPath,
       };
 
+      if (!newPath) {
+        res.status(400).json({
+          message: "Tipo de imagem inválido",
+        });
+      }
+
       const sql = "INSERT INTO pets SET ?";
       connection.query(sql, newPet, (error, results) => {
         if (error) {
