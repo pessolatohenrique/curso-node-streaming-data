@@ -2,6 +2,7 @@ class Tables {
   init(connection) {
     this.connection = connection;
     this.createTreatment();
+    this.createPet();
   }
 
   createTreatment() {
@@ -14,6 +15,19 @@ class Tables {
       }
 
       console.log("Table treatments created!");
+    });
+  }
+
+  createPet() {
+    const sql =
+      "CREATE TABLE IF NOT EXISTS pets (id int NOT NULL AUTO_INCREMENT, name VARCHAR(50) NOT NULL, image TEXT, PRIMARY KEY(id))";
+
+    this.connection.query(sql, (error) => {
+      if (error) {
+        console.log("Error on sql", error);
+      }
+
+      console.log("Table pets created!");
     });
   }
 }
