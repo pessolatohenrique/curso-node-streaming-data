@@ -1,4 +1,5 @@
 const moment = require("moment");
+const axios = require("axios");
 const connection = require("../infrastructure/connection");
 
 class Treatment {
@@ -17,7 +18,7 @@ class Treatment {
   find(id, res) {
     const sql = `SELECT * FROM treatments WHERE id = ${id}`;
 
-    connection.query(sql, (error, results) => {
+    connection.query(sql, async (error, results) => {
       if (error) {
         res.status(400).json(error);
         return false;
@@ -27,6 +28,13 @@ class Treatment {
         res.status(200).json([]);
         return false;
       }
+
+      const cpf = results[0].client;
+      const { data } = await axios.get(
+        `${process.env.URL_SERVICE_CUSTOMER}/${cpf}`
+      );
+
+      results[0].customer = data;
 
       res.status(200).json(results[0]);
     });

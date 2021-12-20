@@ -12,7 +12,7 @@ Projeto de Petshop construído com base no curso [NodeJS: Streaming de dados e R
 
 Realizar o clone do projeto
 
-    git clone https://github.com/USER/curso-sequelize-node.git
+    git clone https://github.com/USER/curso-node-streaming-data.git
 
 Acesse a pasta do projeto e rode o comando para instalar as dependências npm:
 
@@ -25,3 +25,7 @@ E, por fim, rode o projeto:
 ```
   npm start
 ```
+
+Para executar o serviço de "busca cpf" (com faker), executar
+
+    node services/Customer.js
