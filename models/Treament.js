@@ -1,43 +1,41 @@
 const moment = require("moment");
 const axios = require("axios");
 const connection = require("../infrastructure/connection");
+const { executeQuery } = require("../infrastructure/queryHelper");
+const repository = require("../repositories/Treatment");
 
 class Treatment {
-  index(res) {
-    const sql = "SELECT * FROM treatments";
-    connection.query(sql, (error, results) => {
-      if (error) {
-        res.status(400).json(error);
-        return false;
-      }
-
-      res.status(200).json(results);
-    });
+  async index() {
+    try {
+      const results = await repository.list();
+      return results;
+    } catch (error) {
+      return { error };
+    }
   }
 
-  find(id, res) {
+  async find(id, res) {
     const sql = `SELECT * FROM treatments WHERE id = ${id}`;
+    const results = await executeQuery(sql);
 
-    connection.query(sql, async (error, results) => {
-      if (error) {
-        res.status(400).json(error);
-        return false;
-      }
+    if (!results) {
+      res.status(400).json(error);
+      return false;
+    }
 
-      if (!results[0]) {
-        res.status(200).json([]);
-        return false;
-      }
+    if (!results[0]) {
+      res.status(200).json([]);
+      return false;
+    }
 
-      const cpf = results[0].client;
-      const { data } = await axios.get(
-        `${process.env.URL_SERVICE_CUSTOMER}/${cpf}`
-      );
+    const cpf = results[0].client;
+    const { data } = await axios.get(
+      `${process.env.URL_SERVICE_CUSTOMER}/${cpf}`
+    );
 
-      results[0].customer = data;
+    results[0].customer = data;
 
-      res.status(200).json(results[0]);
-    });
+    res.status(200).json(results[0]);
   }
 
   update(id, values, res) {
