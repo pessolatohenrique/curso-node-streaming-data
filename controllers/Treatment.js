@@ -7,27 +7,27 @@ module.exports = (app) => {
     return res.status(200).json(results);
   });
 
-  app.get("/treatment/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-
-    Treatment.find(id, res);
+  app.get("/treatment/:id", async (req, res) => {
+    const result = await Treatment.find(req.params.id);
+    if (result.error) return res.status(400).json(result.error);
+    return res.status(200).json(result);
   });
 
-  app.post("/treatment", (req, res) => {
-    const treatment = req.body;
-    Treatment.store(treatment, res);
+  app.post("/treatment", async (req, res) => {
+    const result = await Treatment.store(req.body);
+    if (result.error) return res.status(400).json(result.error);
+    return res.status(200).json(result);
   });
 
-  app.patch("/treatment/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-    const values = req.body;
-
-    Treatment.update(id, values, res);
+  app.patch("/treatment/:id", async (req, res) => {
+    const result = await Treatment.update(req.params.id, req.body);
+    if (result.error) return res.status(400).json(result.error);
+    return res.status(200).json(result);
   });
 
-  app.delete("/treatment/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-
-    Treatment.delete(id, res);
+  app.delete("/treatment/:id", async (req, res) => {
+    const result = await Treatment.delete(req.params.id);
+    if (result.error) return res.status(400).json(result.error);
+    return res.status(200).json(result);
   });
 };
